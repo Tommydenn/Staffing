@@ -66,7 +66,7 @@ const FLAG_LABELS = {
   missing_documentation: { label: 'Documentation Gap', icon: 'AlertCircle', color: 'text-yellow-600' },
 };
 
-export default function StaffingDashboard() {
+function StaffingDashboard() {
   const [activeTab, setActiveTab] = useState('employees');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortKey, setSortKey] = useState('utilization_pct');
