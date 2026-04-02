@@ -8,17 +8,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.12.7/Recharts.min.js"></script>
   <script src="https://unpkg.com/lucide-react@0.383.0/dist/umd/lucide-react.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel">
+  <script type="text/plain" id="app-src">
     const { useState, useMemo } = React;
     const {
       BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
       ResponsiveContainer, Legend, Cell
-    } = _Recharts2;
+    } = window.RechartsLib;
     const {
       Search, AlertTriangle, TrendingUp, Users, Clock, DollarSign,
       ChevronDown, ChevronRight, Activity, AlertCircle, CheckCircle, XCircle, HelpCircle, Link2
@@ -1708,6 +1707,25 @@ function StaffingDashboard() {
 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(React.createElement(StaffingDashboard));
+  </script>
+
+  <script type="module">
+    try {
+      const Recharts = await import('https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0');
+      window.RechartsLib = Recharts;
+      console.log('Recharts loaded:', Object.keys(Recharts).length, 'exports');
+      
+      // Get the JSX source and compile it
+      const src = document.getElementById('app-src').textContent;
+      const s = document.createElement('script');
+      s.type = 'text/babel';
+      s.textContent = src;
+      document.body.appendChild(s);
+      if (window.Babel) window.Babel.transformScriptTags();
+    } catch(e) {
+      console.error('Load failed:', e);
+      document.getElementById('root').innerHTML = '<div style="padding:2rem;color:red">Error: ' + e.message + '</div>';
+    }
   </script>
 </body>
 </html>
